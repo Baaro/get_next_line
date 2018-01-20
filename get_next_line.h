@@ -14,15 +14,16 @@
 # define GET_NEXT_LINE_H
 # include <stdlib.h>
 # include <fcntl.h>
-# include <stdio.h>
+# include <stdio.h> // DELETE ME, BEFORE PUSH ! ! !
+# include "libft.h"
 # define BUFF_SIZE 1
 
-typedef struct      s_lst 
-{
-    int             fd;
-    char            *data;
-    struct s_lst    *next;
-}                   t_lst;
+// typedef struct      s_lst 
+// {
+//     int             fd;
+//     char            *data;
+//     struct s_lst    *next;
+// }                   t_lst;
 
 int get_next_line(const int fd, char **line);
 
