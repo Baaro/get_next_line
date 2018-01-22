@@ -15,7 +15,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <stdio.h> // DELETE ME, BEFORE PUSH ! ! !
-# include "libft.h"
+# include "./libft/libft.h"
 # define BUFF_SIZE 1
 
 // typedef struct      s_lst 
