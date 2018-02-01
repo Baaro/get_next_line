@@ -12,18 +12,15 @@
 
 #include "get_next_line.h"
 
-
 static char *ft_check(char **str, int *i)
 {
     char    *tmp;
-    // int     i;
 
-    // i = 0;
     tmp = NULL;
     while ((*str)[*i])
     {
         if ((*str)[(*i) + 1] == '\n' || (*str)[(*i) + 1] == '\0')
-        {   
+        {
             (*str)++;
             break ;
         }
@@ -36,10 +33,14 @@ static char *ft_check(char **str, int *i)
     }
     return (tmp);
 }
+static int ft_change(char *str, char **line, int i)
+{
+    return ();
+}
 
 int         get_next_line(const int fd, char **line)
 {
-    static char    *str;
+    static char     *str;
     char            *tmp;
     int             ret;
     int             i;
@@ -55,26 +56,33 @@ int         get_next_line(const int fd, char **line)
     }
     while ((ret = read(fd, str, BUFF_SIZE)) > 0)
     {
-        tmp = ft_check(&str, &i);
-        if (tmp[i + 1] == '\n')
-        {   
-            *line = ft_strdup(tmp);
-            str = str + (++i);
-            free(tmp);
-            return (1);
-        }
-        if (tmp[i + 1] == '\0')
-        {
-            *line = ft_strdup(tmp);
-            free(tmp);
-            free(str);
-            return (0);
-        }
+        // if (tmp[i + 1] == '\n')
+        // {   
+        //     *line = ft_strdup(tmp);
+        //     str = str + (++i);
+        //     free(tmp);
+        //     return (1);
+        // }
+        // if (tmp[i + 1] == '\0')
+        // {
+        //     *line = ft_strdup(tmp);
+        //     free(tmp);
+        //     free(str);
+        //     return (0);
+        // }
         if (!(str = ft_strnew(BUFF_SIZE)))
         {
             free(str);
             return (-1);
         }
+        // str = str + (++i);
+    }
+    tmp = ft_check(&str, &i);
+    if (ft_change(tmp, *line, i) == 1)
+    {
+        free(tmp);
+        str = str + (++i);
+        return (1);
     }
     if (ret == -1)
         return (-1);
@@ -82,7 +90,7 @@ int         get_next_line(const int fd, char **line)
     return (0);
 }
 
-int     main(int argc, char **argv)
+int         main(int argc, char **argv)
 {
     int     fd;
     char    *str;
