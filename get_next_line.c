@@ -17,13 +17,10 @@ static char *ft_check(char **str, int *i)
     char    *tmp;
 
     tmp = NULL;
-    while ((*str)[*i])
+    while ((*str)[*i] != '\0')
     {
         if ((*str)[(*i) + 1] == '\n' || (*str)[(*i) + 1] == '\0')
-        {
-            (*str)++;
             break ;
-        }
         (*i)++;
     }
     if (!(tmp = ft_strsub((const char*)(*str), (unsigned int)(**str), *i)))
@@ -33,9 +30,21 @@ static char *ft_check(char **str, int *i)
     }
     return (tmp);
 }
-static int ft_change(char *str, char **line, int i)
+
+static int ft_cut(char *tmp, char **line, int i)
 {
-    return ();
+    if (tmp[i + 1] == '\n')
+    {   
+        *line = ft_strdup(tmp);
+        free(tmp);
+        return (1);
+    }
+    if (tmp[i + 1] == '\0')
+    {
+        *line = ft_strdup(tmp);
+        free(tmp);
+    }
+    return (0);
 }
 
 int         get_next_line(const int fd, char **line)
@@ -47,7 +56,7 @@ int         get_next_line(const int fd, char **line)
 
     ret = 0;
     i = 0;
-    str = *line;
+    str = NULL;
     tmp = NULL;
     if (!(str = ft_strnew(BUFF_SIZE)))
     {
@@ -56,38 +65,21 @@ int         get_next_line(const int fd, char **line)
     }
     while ((ret = read(fd, str, BUFF_SIZE)) > 0)
     {
-        // if (tmp[i + 1] == '\n')
-        // {   
-        //     *line = ft_strdup(tmp);
-        //     str = str + (++i);
-        //     free(tmp);
-        //     return (1);
-        // }
-        // if (tmp[i + 1] == '\0')
-        // {
-        //     *line = ft_strdup(tmp);
-        //     free(tmp);
-        //     free(str);
-        //     return (0);
-        // }
         if (!(str = ft_strnew(BUFF_SIZE)))
         {
             free(str);
             return (-1);
         }
-        // str = str + (++i);
     }
     tmp = ft_check(&str, &i);
-    if (ft_change(tmp, *line, i) == 1)
+    if (ft_cut(tmp, &(*line), i) == 1)
     {
         free(tmp);
-        str = str + (++i);
+        str += (++i);
         return (1);
     }
-    if (ret == -1)
-        return (-1);
     free(str);
-    return (0);
+    return (ret == -1 ? -1 : 0);
 }
 
 int         main(int argc, char **argv)
@@ -107,6 +99,6 @@ int         main(int argc, char **argv)
     }
     read(fd, str, 50);
     get_next_line(fd, &str);
-    printf("%s", str);
+    // printf("%s", str);
     return (0);
 }
