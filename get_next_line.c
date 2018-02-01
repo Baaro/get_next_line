@@ -12,54 +12,93 @@
 
 #include "get_next_line.h"
 
-int     get_next_line(const int fd, char **line)
-{
-    char        *str;
-    int         i;
-    int         j;
-    int         f;
 
-    f = 0;
-    j = 0;
+static char *ft_check(char **str, int *i)
+{
+    char    *tmp;
+    // int     i;
+
+    // i = 0;
+    tmp = NULL;
+    while ((*str)[*i])
+    {
+        if ((*str)[(*i) + 1] == '\n' || (*str)[(*i) + 1] == '\0')
+        {   
+            (*str)++;
+            break ;
+        }
+        (*i)++;
+    }
+    if (!(tmp = ft_strsub((const char*)(*str), (unsigned int)(**str), *i)))
+    {
+        free(tmp);
+        return (0);
+    }
+    return (tmp);
+}
+
+int         get_next_line(const int fd, char **line)
+{
+    static char    *str;
+    char            *tmp;
+    int             ret;
+    int             i;
+
+    ret = 0;
     i = 0;
     str = *line;
-    if (!(str = ft_strnew(ft_strlen((*line)))))
+    tmp = NULL;
+    if (!(str = ft_strnew(BUFF_SIZE)))
     {
         free(str);
         return (-1);
     }
-    if (!(f = read(fd, str, 1)))
+    while ((ret = read(fd, str, BUFF_SIZE)) > 0)
     {
-        ft_putstr("Cannot read file\n");
-        return (-1);
+        tmp = ft_check(&str, &i);
+        if (tmp[i + 1] == '\n')
+        {   
+            *line = ft_strdup(tmp);
+            str = str + (++i);
+            free(tmp);
+            return (1);
+        }
+        if (tmp[i + 1] == '\0')
+        {
+            *line = ft_strdup(tmp);
+            free(tmp);
+            free(str);
+            return (0);
+        }
+        if (!(str = ft_strnew(BUFF_SIZE)))
+        {
+            free(str);
+            return (-1);
+        }
     }
-    printf("%s", str);
-    // while (str[i] != '\n')
-    //     printf("%c\n", str[i++]);
-    // while (str[i] != '\n')
-    //     i++;
-    // while (j < i || str[j] == '\n')
-    // {
-    //     // ft_putstr(&str[j]);
-    //     // ft_putstr("\n");
-    //     j++;
-    // }
+    if (ret == -1)
+        return (-1);
+    free(str);
     return (0);
-
 }
 
 int     main(int argc, char **argv)
 {
     int     fd;
     char    *str;
-    
+    int     ac;
+
+    ac = argc;
+    while (ac > 1)
+        ac--;
     str = (char*)malloc(sizeof(char) * 100);
     if ((fd = open(argv[1], O_RDONLY)) == -1)
     {
         printf("Cannot open file.\n");
         exit(1);
     }
-    // read(fd, str, BUFF_SIZE);
+    read(fd, str, 50);
     get_next_line(fd, &str);
+    printf("%s", str);
     return (0);
 }

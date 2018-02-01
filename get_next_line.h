@@ -16,14 +16,7 @@
 # include <fcntl.h>
 # include <stdio.h> // DELETE ME, BEFORE PUSH ! ! !
 # include "./libft/libft.h"
-# define BUFF_SIZE 1
-
-// typedef struct      s_lst 
-// {
-//     int             fd;
-//     char            *data;
-//     struct s_lst    *next;
-// }                   t_lst;
+# define BUFF_SIZE 4
 
 int get_next_line(const int fd, char **line);
 
