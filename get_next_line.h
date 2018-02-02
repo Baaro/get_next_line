@@ -10,13 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
-# include <stdlib.h>
-# include <fcntl.h>
-# include <stdio.h> // DELETE ME, BEFORE PUSH ! ! !
-# include "./libft/libft.h"
-# define BUFF_SIZE 4
+#ifndef	GET_NEXT_LINE_H
+# define	GET_NEXT_LINE_H
+# include	<stdlib.h>
+# include	<fcntl.h>
+# include	<stdio.h> // DELETE ME, BEFORE PUSH ! ! !
+# include	"./libft/libft.h"
+# define	BUFF_SIZE 5
+
+# define	RED "\x1b[31m" // DELETE ME, BEFORE PUSH ! ! !
 
 int get_next_line(const int fd, char **line);
 
