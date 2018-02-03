@@ -1,4 +1,4 @@
-    /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -12,38 +12,26 @@
 
 #include "get_next_line.h"
 
-static char *ft_check(char **str, int ret, *i)
+static char *ft_cut(char **str, char **line)
 {
-    char    *tmp;
+    char    *pos;
+    char    *del;
 
-    tmp = NULL;
-    while (*i < ret)
+    pos = NULL;
+    del = NULL;
+    if (pos = ft_strchr((*str), '\n'))
     {
-        if ((*str)[(*i) + 1] == '\n' || (*str)[(*i) + 1] == '\0')
-            break ;
-        (*i)++;
-    }
-    tmp = ft_strsub((const char*)(*str), (unsigned int)(**str), i);
-    (*str) += (*i);
-    return (tmp);
-}
-
-static int ft_cut(char *tmp, char **line, int *i)
-{
-    if ((*tmp)[i + 1] == '\n')
-    {   
-        *line = ft_strdup(tmp);
-        free(tmp);
-        return (1);
-    }
-    if ((*tmp)[i + 1] == '\0')
-    {
-        *line = ft_strdup(tmp);
-        free(tmp);
+        *line = ft_strsub(str, 0, pos - str);
+        *str = ft_strdup(pos + 1);
     }
     else
-        *line = ft_strdup(tmp);
-    return (0);
+    {
+        *line = ft_strsub(str, 0, pos - str);
+        del = *str;
+        *str += i;
+        ft_strdel(del);
+    }
+    return (*line);
 }
 
 int         get_next_line(const int fd, char **line)
@@ -56,20 +44,17 @@ int         get_next_line(const int fd, char **line)
 
     i = 0;
     ret = 0;
-    tmp = NULL;
+    tmp = ft_strnew(0);
     concat = NULL;
     str = ft_strnew(BUFF_SIZE);
     while (ret = read(fd, str, BUFF_SIZE))
     {
-        tmp = ft_strjoing(tmp, ft_check(&str, ret, &i));
-        if (ft_cut(tmp, &(*line), i) == 1)
-        {
-           free(tmp);
-           return (1);
-        }
-        str = ft_strnew(BUFF_SIZE);
+        tmp = ft_strjoing(tmp, ft_cut(&str, line));
+        ft_bzero(str, BUFF_SIZE);
+        if (ft_strchr(*line), '\n')
+            return (1);
     }
-    free(str);
+    ft_strdel(str);
     return (ret == -1 ? -1 : 0);
 }
 
