@@ -21,17 +21,10 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
 	if (!(cs1 = ft_strdup(s1)))
-	{	
-		free(cs1);
 		return (NULL);
-	}
 	if (!(cs2 = ft_strdup(s2)))
-	{
-		free(cs2);
 		return (NULL);
-	}
 	if (!(concat = ft_strcat(cs1, cs2)))
 		return (NULL);
-	free(cs2);
 	return (concat);
 }
