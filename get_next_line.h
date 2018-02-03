@@ -16,7 +16,7 @@
 # include	<fcntl.h>
 # include	<stdio.h> // DELETE ME, BEFORE PUSH ! ! !
 # include	"./libft/libft.h"
-# define	BUFF_SIZE 5
+# define	BUFF_SIZE 4
 
 # define	RED "\x1b[31m" // DELETE ME, BEFORE PUSH ! ! !
 

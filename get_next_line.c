@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+    /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
@@ -23,11 +23,8 @@ static char *ft_check(char **str, int *i)
             break ;
         (*i)++;
     }
-    if (!(tmp = ft_strsub((const char*)(*str), (unsigned int)(**str), *i)))
-    {
-        free(tmp);
-        return (0);
-    }
+    tmp = ft_strsub((const char*)(*str), (unsigned int)(**str), *i);
+    (*str) += ++i;
     return (tmp);
 }
 
@@ -56,7 +53,6 @@ static int ft_cut(char *tmp, char **line, int i)
 int         get_next_line(const int fd, char **line)
 {
     static char     *str;
-    char            *str_cut;
     char            *tmp;
     int             ret;
     int             i;
@@ -64,20 +60,18 @@ int         get_next_line(const int fd, char **line)
     i = 0;
     ret = 0;
     str = NULL;
-    str_cut = NULL;
-    tmp = ft_strnew(BUFF_SIZE);
-    while ((ret = read(fd, tmp, BUFF_SIZE)) > 0)
+    str = ft_strnew(BUFF_SIZE + 1);
+    while (ret = read(fd, str, BUFF_SIZE))
     {
-        tmp = ft_strnew(BUFF_SIZE);
-        str_cut = ft_check(&tmp, &i);
+        tmp = ft_check(&str, &i);
+        tmp = ft_strnew(BUFF_SIZE + 1);
         if (ft_cut(tmp, &(*line), i) == 1)
         {
            free(tmp);
            // str += (++i);
            return (1);
         }
-        free(str);
-    }
+    free(str);
     return (ret == -1 ? -1 : 0);
 }
 
