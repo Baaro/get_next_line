@@ -37,29 +37,31 @@ static char *ft_cut(char **buff, int *flag)
 
 int	get_next_line(const int fd, char **line)
 {
-	static char	*buff;
+	static char	*str;
 	char		*save;
+	char		*tmp;
 	int			ret;
 	int			flag;
 
 	flag = 0;
 	ret = 0;
-	save = ft_strnew(BUFF_SIZE);
-	buff = ft_strnew(0);
+	tmp = NULL;
+	save = ft_strnew(BUFF_SIZE); 
+	str = ft_strnew(0);
 	while ((ret = read(fd, save, BUFF_SIZE)))
 	{
-		buff = ft_strjoin(buff, ft_cut(&save, &flag));
+		str = ft_strjoin(str, tmp = ft_cut(&save, &flag));
+		ft_strdel(&tmp);
 		if (flag == 1)
 		{
-			*line = ft_strdup(buff);
-			buff = ft_strdup(save);
+			*line = ft_strdup(str);
+			str = ft_strdup(save);
 			ft_strdel(&save);
 			return (1);
 		}
-		buff = ft_strdup(save);
 		ft_bzero(save, BUFF_SIZE);
 	}
-	ft_strdel(&buff);
+	ft_strdel(&str);
 	return (ret == -1 ? -1 : 0);
 }
 
