@@ -19,17 +19,19 @@ static char *ft_cut(char **str, char **line)
 
     pos = NULL;
     del = NULL;
-    if (pos = ft_strchr((*str), '\n'))
+    if ((pos = ft_strchr((*str), '\n')))
     {
-        *line = ft_strsub(str, 0, pos - str);
+        *line = ft_strsub(*str, 0, pos - (*str));
+        del = *str;
         *str = ft_strdup(pos + 1);
+        free(del);
     }
     else
     {
-        *line = ft_strsub(str, 0, pos - str);
+        *line = ft_strsub(*str, 0, BUFF_SIZE);
         del = *str;
-        *str += i;
-        ft_strdel(del);
+        *str += BUFF_SIZE;
+        free(del);
     }
     return (*line);
 }
@@ -38,23 +40,25 @@ int         get_next_line(const int fd, char **line)
 {
     static char     *str;
     char            *tmp;
-    char            *concat;
     int             ret;
     int             i;
 
     i = 0;
     ret = 0;
     tmp = ft_strnew(0);
-    concat = NULL;
     str = ft_strnew(BUFF_SIZE);
-    while (ret = read(fd, str, BUFF_SIZE))
+    while ((ret = read(fd, str, BUFF_SIZE)))
     {
-        tmp = ft_strjoing(tmp, ft_cut(&str, line));
+        tmp = ft_strjoin(tmp, ft_cut(&str, line));
+        printf("%s\n",tmp);
         ft_bzero(str, BUFF_SIZE);
-        if (ft_strchr(*line), '\n')
+        if (ft_strchr(tmp, '\n'))
+        {
+            *line = ft_strdup(tmp);
             return (1);
+        }
     }
-    ft_strdel(str);
+    ft_strdel(&str);
     return (ret == -1 ? -1 : 0);
 }
 

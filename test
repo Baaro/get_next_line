@@ -1,14 +1,3 @@
 12345
 22
 333
-
-if ((pos = ft_strchr(str, '\n')))
-{
-    *line = ft_strsub(tmp, 0, pos - tmp);
-    str = ft_strdup(pos + 1);
-}
-tmp = ft_strnew(0);
-
-strdel
-bzero
-create "del" var in ft_check
