@@ -11,7 +11,18 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
+static int ft_to_return(char **line, char *str, char *save, int flag)
+{
+	if (flag == 1)
+	{
+		*line = ft_strdup(str);
+		free(str);
+		str = ft_strdup(save);
+		ft_strdel(&save);
+		return (1);
+	}
+	return (0);
+}
 static char *ft_cut(char **buff, int *flag)
 {
 	char	*pos;
@@ -53,19 +64,9 @@ int	get_next_line(const int fd, char **line)
 	{
 		str = ft_strjoin(str, tmp = ft_cut(&save, &flag));
 		ft_strdel(&tmp);
-		if (flag == 1)
-		{
-			*line = ft_strdup(str);
-			free(str);
-			str = ft_strdup(save);
-			ft_strdel(&save);
+		if (ft_to_return(line, str, save, flag))
 			return (1);
-		}
-		else
-		{
-			*line = ft_strdup(str);
-			ft_strdel(&str);
-		}
+		*line = ft_strdup(str);
 		ft_bzero(save, BUFF_SIZE);
 	}
 	ft_strdel(&str);
