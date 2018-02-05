@@ -47,7 +47,8 @@ int	get_next_line(const int fd, char **line)
 	ret = 0;
 	tmp = NULL;
 	save = ft_strnew(BUFF_SIZE); 
-	str = ft_strnew(0);
+	if (str == NULL)
+		str = ft_strnew(0);
 	while ((ret = read(fd, save, BUFF_SIZE)))
 	{
 		str = ft_strjoin(str, tmp = ft_cut(&save, &flag));
@@ -60,28 +61,13 @@ int	get_next_line(const int fd, char **line)
 			ft_strdel(&save);
 			return (1);
 		}
+		else
+		{
+			*line = ft_strdup(str);
+			ft_strdel(&str);
+		}
 		ft_bzero(save, BUFF_SIZE);
 	}
 	ft_strdel(&str);
 	return (ret == -1 ? -1 : 0);
-}
-
-int         main(int argc, char **argv)
-{
-    int     fd;
-    char    *str;
-    int     ac;
-
-    str = NULL;
-    ac = argc;
-    while (ac > 1)
-        ac--;
-    if ((fd = open(argv[1], O_RDONLY)) == -1)
-    {
-        printf(RED"Cannot open file.\n");
-        exit(1);
-    }
-    while ((get_next_line(fd, &str)))
-   		printf("%s\n", str);
-    return (0);
 }

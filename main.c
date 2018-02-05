@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strjoin.c                                       :+:      :+:    :+:   */
+/*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: vsokolog <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/23 11:56:07 by vsokolog          #+#    #+#             */
-/*   Updated: 2017/11/23 11:56:08 by vsokolog         ###   ########.fr       */
+/*   Created: 2018/02/05 16:26:37 by vsokolog          #+#    #+#             */
+/*   Updated: 2018/02/05 16:26:38 by vsokolog         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "get_next_line.h"
 
-char	*ft_strjoin(char const *s1, char const *s2)
+int main(int argc, char **argv)
 {
-	char *concat;
-	char *cs2;
+    char    *str;
+    int   fd;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	if (!(cs2 = ft_strdup(s2)))
-		return (NULL);
-	if (!(concat = ft_strcat((char*)s1, cs2)))
-		return (NULL);
-	ft_strdel(cs2);
-	return (concat);
+    str = NULL;
+    fd = 0;
+    while (argc > 1)
+        argc--;
+    if ((fd = open(argv[1], O_RDONLY)) == -1)
+    {
+        printf(RED"Cannot open file.\n");
+        exit(0);
+    }
+    while (get_next_line(fd, &str))
+        printf("%s\n", str);
+    return (0);
 }
