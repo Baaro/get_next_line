@@ -55,6 +55,7 @@ int	get_next_line(const int fd, char **line)
 		if (flag == 1)
 		{
 			*line = ft_strdup(str);
+			free(str);
 			str = ft_strdup(save);
 			ft_strdel(&save);
 			return (1);
