@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
 static int ft_to_return(char **line, char *str, char *save, int flag)
 {
 	if (flag == 1)
@@ -21,8 +22,11 @@ static int ft_to_return(char **line, char *str, char *save, int flag)
 		ft_strdel(&save);
 		return (1);
 	}
+	*line = ft_strdup(str);
+	ft_bzero(save, BUFF_SIZE);
 	return (0);
 }
+
 static char *ft_cut(char **buff, int *flag)
 {
 	char	*pos;
@@ -57,7 +61,7 @@ int	get_next_line(const int fd, char **line)
 	flag = 0;
 	ret = 0;
 	tmp = NULL;
-	save = ft_strnew(BUFF_SIZE); 
+	save = ft_strnew(BUFF_SIZE);
 	if (str == NULL)
 		str = ft_strnew(0);
 	while ((ret = read(fd, save, BUFF_SIZE)))
@@ -66,8 +70,6 @@ int	get_next_line(const int fd, char **line)
 		ft_strdel(&tmp);
 		if (ft_to_return(line, str, save, flag))
 			return (1);
-		*line = ft_strdup(str);
-		ft_bzero(save, BUFF_SIZE);
 	}
 	ft_strdel(&str);
 	return (ret == -1 ? -1 : 0);
