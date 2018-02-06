@@ -26,6 +26,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		return (NULL);
 	if (!(concat = ft_strcat(cs1, cs2)))
 		return (NULL);
-	free(cs2);
 	return (concat);
 }
