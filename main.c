@@ -26,7 +26,7 @@ int main(int argc, char **argv)
         printf(RED"Cannot open file.\n");
         exit(0);
     }
-    while (get_next_line(fd, &str))
+    while (get_next_line(fd, &str) == 1)
         printf("%s\n", str);
     return (0);
 }
