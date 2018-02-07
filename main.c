@@ -14,19 +14,20 @@
 
 int main(int argc, char **argv)
 {
-    char    *str;
+    char    *line;
     int   fd;
 
-    str = NULL;
-    fd = 0;
-    while (argc > 1)
-        argc--;
+    if (argc == 1)
+        fd = 0;
     if ((fd = open(argv[1], O_RDONLY)) == -1)
     {
         printf(RED"Cannot open file.\n");
         exit(0);
     }
-    while (get_next_line(fd, &str) == 1)
-        printf("%s\n", str);
+    while (get_next_line(fd, &line) == 1)
+    {
+        printf("%s\n", line);
+        free(line);
+    }
     return (0);
 }
