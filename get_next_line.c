@@ -61,5 +61,5 @@ int         get_next_line(const int fd, char **line)
     }
     ft_strdel(&bf);
     ft_strdel(&str);
-    return (0);
+    return (ret == -1 ? -1 : 0);
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int main(int argc, char **argv)
 {
@@ -21,7 +22,7 @@ int main(int argc, char **argv)
         fd = 0;
     if ((fd = open(argv[1], O_RDONLY)) == -1)
     {
-        printf(RED"Cannot open file.\n");
+        printf("Cannot open file.\n");
         exit(0);
     }
     while (get_next_line(fd, &line) == 1)
