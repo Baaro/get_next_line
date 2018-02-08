@@ -24,14 +24,14 @@ static int ft_check(char **str, char **bf, char **line, int ret)
     if ((pos = ft_strchr(*str, '\n')))
     {
         (*line = ft_strsub(*str, 0, pos - (*str)));
-        del = *str;
+        (del = *str) ? ft_strdel(bf) : 0;
         (*str = ft_strdup(pos + 1)) ? ft_strdel(&del) : 0;
         return (1);
     }
     if (ret == 0 && !ft_strchr(*str, '\n') && ft_strlen(*str))
     {
-        *line = ft_strdup(*str);
-        ft_strdel(str);
+        (*line = ft_strdup(*str)) ? ft_strdel(str) : 0;
+        ft_strdel(bf);
         return (1);
     }
     return (0);
