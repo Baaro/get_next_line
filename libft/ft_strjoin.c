@@ -20,7 +20,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 
 	if (s1 == NULL || s2 == NULL)
 		return (NULL);
-	if(!(cs1 = ft_strdup(s1)))
+	if (!(cs1 = ft_strdup(s1)))
 		return (NULL);
 	if (!(cs2 = ft_strdup(s2)))
 		return (NULL);
