@@ -12,7 +12,7 @@
 
 #include "get_next_line.h"
 
-static int ft_check(char **str, char **bf, char **line)
+static int ft_check(char **str, char **bf, char **line, int ret)
 {
     char    *del;
     char    *pos;
@@ -20,17 +20,23 @@ static int ft_check(char **str, char **bf, char **line)
     pos = NULL;
     del = *str;
     (*str = ft_strjoin(*str, *bf)) ? ft_strdel(&del) : 0;
+    ft_strclr(*bf);
     if ((pos = ft_strchr(*str, '\n')))
     {
         (*line = ft_strsub(*str, 0, pos - (*str)));
         del = *str;
         (*str = ft_strdup(pos + 1)) ? ft_strdel(&del) : 0;
-        ft_strclr(*bf);
         return (1);
     }
-    ft_strclr(*bf);
+    if (ret == 0 && !ft_strchr(*str, '\n') && ft_strlen(*str))
+    {
+        *line = ft_strdup(*str);
+        ft_strdel(str);
+        return (1);
+    }
     return (0);
 }
+
 int         get_next_line(const int fd, char **line)
 {
     static char *str;
@@ -44,15 +50,16 @@ int         get_next_line(const int fd, char **line)
 		return (-1);
     while ((ret = read(fd, bf, BUFF_SIZE)))
     {
-        bf[ret + 1] = '\0'; 
-        if (ft_check(&str, &bf, line))
+        bf[ret + 1] = '\0';
+        if (ft_check(&str, &bf, line, ret))
             return (1);
     }
     if (ret == 0 && ft_strlen(str))
     {
-        (*line = ft_strdup(str)) ? ft_strdel(&str) : 0;
-        return (1);
+        if (ft_check(&str, &bf, line, ret))
+            return (1);
     }
+    ft_strdel(&bf);
     ft_strdel(&str);
     return (0);
 }
