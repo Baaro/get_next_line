@@ -26,7 +26,7 @@ int main(int argc, char **argv)
         exit(0);
     }
     get_next_line(fd, &line);
-    printf("%s\n", line);
+    printf("%s\n",line);
     while (get_next_line(fd, &line) == 1)
     {
         printf("%s\n", line);
