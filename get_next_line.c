@@ -41,30 +41,17 @@ int			get_next_line(const int fd, char **line)
 	static char		*str;
 	char			bf[BUFF_SIZE + 1];
 	int				ret;
-	char			*pos;
-	char			*del;
-	
+
 	!str ? str = ft_strnew(BUFF_SIZE) : 0;
-	if ((fd < 0 || !line || read(fd, bf, 0) < 0))
+	if (fd < 0 || !line || read(fd, NULL, 0) < 0 || BUFF_SIZE < 1)
 		return (-1);
-	if ((pos = ft_strchr(str, '\n')))
-	{
-		(*line = ft_strsub(str, 0, pos - (str)));
-		del = str;
-		(str = ft_strdup(pos + 1)) ? ft_strdel(&del) : 0;
-		return (1);
-	}
-	while ((ret = read(fd, bf, BUFF_SIZE)))
+	while (!ft_strchr(str,'\n') && ((ret = read(fd, bf, BUFF_SIZE))))
 	{
 		bf[ret] = '\0';
 		if (ft_check(&str, bf, line, ret))
 			return (1);
 	}
-	if (ret == 0 && ft_strlen(str))
-	{
-		if (ft_check(&str, bf, line, ret))
-			return (1);
-	}
-	ft_strdel(&str);
-	return (ret == -1 ? -1 : 0);
+	if (ret == -1)
+		return (-1);
+	return (ft_check(&str, bf, line, ret));
 }

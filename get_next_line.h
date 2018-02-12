@@ -15,13 +15,14 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include "./libft/libft.h"
-# define BUFF_SIZE 1000
+# define BUFF_SIZE 7
 
-// typedef struct  s_lst
-// {
-//     char        *str;
-//     int         fd;
-// }               t_lst;
+typedef struct  	s_lst
+{
+    char			*str;
+    int				fd;
+    struct s_lst	*next;
+}               	t_lst;
 
 int get_next_line(const int fd, char **line);
 
