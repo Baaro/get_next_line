@@ -39,11 +39,10 @@ static int	ft_check(char **str, char **bf, char **line, int ret)
 
 int			get_next_line(const int fd, char **line)
 {
-	static t_list	*str;
+	static char		*str;
 	char			*bf;
 	int				ret;
 
-	bf = NULL;
 	bf = ft_strnew(BUFF_SIZE);
 	!str ? str = ft_strnew(BUFF_SIZE) : 0;
 	if ((fd < 0 || !line || read(fd, bf, 0) < 0))
