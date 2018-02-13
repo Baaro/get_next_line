@@ -3,3 +3,4 @@ libft/*.[ao]
 a.out
 .vscode
 a.out.dSYM
+.DS_Store
