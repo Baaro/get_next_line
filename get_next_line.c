@@ -19,6 +19,7 @@ static int	ft_check(char **str, char *bf, char **line, int ret)
 
 	pos = NULL;
 	del = *str;
+	bf[ret] = '\0';
 	(*str = ft_strjoin(*str, bf)) ? ft_strdel(&del) : 0;
 	ft_strclr(bf);
 	if ((pos = ft_strchr(*str, '\n')))
@@ -45,13 +46,17 @@ int			get_next_line(const int fd, char **line)
 	!str ? str = ft_strnew(BUFF_SIZE) : 0;
 	if (fd < 0 || !line || read(fd, NULL, 0) < 0 || BUFF_SIZE < 1)
 		return (-1);
-	while (!ft_strchr(str,'\n') && ((ret = read(fd, bf, BUFF_SIZE))))
+	while (1)
 	{
-		bf[ret] = '\0';
+		if (!ft_strchr(str,'\n'))
+			ret = read(fd, bf, BUFF_SIZE);
+		if (ret == -1)
+			return (-1);
 		if (ft_check(&str, bf, line, ret))
 			return (1);
+		if (ret == 0 && !ft_strlen(str))
+			break ;
 	}
-	if (ret == -1)
-		return (-1);
-	return (ft_check(&str, bf, line, ret));
+	ft_strdel(&str);
+	return (0);
 }

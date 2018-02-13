@@ -37,6 +37,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 		concat[size_s1 + i] = s2[i];
 		i++;
 	}
-	concat[size_s2 + i] = '\0';
+	concat[size_s1 + i] = '\0';
 	return (concat);
 }
