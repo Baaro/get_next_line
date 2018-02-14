@@ -15,20 +15,20 @@
 
 int main(int argc, char **argv)
 {
-    char    *line;
-    int   fd;
+	char	*line;
+	int		fd;
 
-    if (argc == 1)
-        fd = 0;
-    if ((fd = open(argv[1], O_RDONLY)) == -1)
-    {
-        printf("Cannot open file.\n");
-        exit(0);
-    }
-    while (get_next_line(fd, &line) == 1)
-    {
-        printf("%s\n", line);
-        free(line);
-    }
-    return (0);
+	if (argc == 1)
+		fd = 0;
+	if ((fd = open(argv[1], O_RDONLY)) == -1)
+	{
+		printf("Cannot open file.\n");
+		exit(0);
+	}
+	while (get_next_line(fd, &line) == 1)
+	{
+		printf("%s\n", line);
+		free(line);
+	}
+	return (0);
 }
