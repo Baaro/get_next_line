@@ -12,23 +12,32 @@
 
 #include "get_next_line.h"
 #include <stdio.h>
+#include <string.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include "get_next_line.h"
 
 int main(int argc, char **argv)
 {
-	char	*line;
-	int		fd;
+    int     fd = open("test", O_RDONLY);
+    int     fd2 = open("test2", O_RDONLY);
+    int     fd3 = open("test3", O_RDONLY);
+    int     ac;
+    char    *av;
+    char    *line;
 
-	if (argc == 1)
-		fd = 0;
-	if ((fd = open(argv[1], O_RDONLY)) == -1)
-	{
-		printf("Cannot open file.\n");
-		exit(0);
-	}
-	while (get_next_line(fd, &line) == 1)
-	{
-		printf("%s\n", line);
-		free(line);
-	}
-	return (0);
+    ac = argc;
+    av = *argv;
+    while (ac != 1)
+        ac--;
+    get_next_line(fd, &line);
+    printf("%s\n", line);
+    free(line);
+    get_next_line(fd2, &line);
+    printf("%s\n", line);
+    free(line);
+    get_next_line(fd3, &line);
+    printf("%s\n", line);
+    free(line);
+    return (0);
 }
