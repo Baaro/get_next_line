@@ -18,12 +18,12 @@ static t_lst	*ft_lst_create(const int fd)
 
 	head = (t_lst*)malloc(sizeof(t_lst));
 	head->fd = fd;
-	!head->str ? head->str = ft_strnew(0) : 0;
+	head->str = ft_strnew(0);
 	head->next = NULL;
 	return (head);
 }
 
-static void		ft_find_fd(t_lst **head, t_lst *new, const int fd)
+static t_lst	*ft_find_fd(t_lst **head, const int fd)
 {
 	t_lst	*tmp;
 
@@ -32,46 +32,36 @@ static void		ft_find_fd(t_lst **head, t_lst *new, const int fd)
 	tmp = *head;
 	while (tmp->next != NULL)
 	{
-		if (tmp->fd == new->fd)
+		if (tmp->fd == fd)
 			break ;
 		tmp = tmp->next;
 	}
-	if (tmp->fd == new->fd)
-	{
-		new->next = tmp->next;
-		tmp->next = new;
-		tmp->str = new->str;
-	}
-	else
-	{
-		tmp->next = new;
-		new->str = tmp->str;
-		new->next = NULL;
-	}
+	return (tmp->fd == fd ? tmp : (tmp->next = ft_lst_create(fd)));
 }
 
-static int		ft_check(char **str, char *bf, char **line, int ret)
+static int		ft_check(t_lst *lst, char *bf, char **line, int ret)
 {
 	char	*del;
 	char	*pos;
 
-	if (*str == NULL)
+	if (lst->str == NULL)
 		return (0);
 	pos = NULL;
-	del = *str;
-	(*str = ft_strjoin(*str, bf)) ? ft_strdel(&del) : 0;
+	del = lst->str;
+	(lst->str = ft_strjoin(lst->str, bf)) ? ft_strdel(&del) : 0;
 	ft_strclr(bf);
-	if ((pos = ft_strchr(*str, '\n')))
+	if ((pos = ft_strchr(lst->str, '\n')))
 	{
-		(*line = ft_strsub(*str, 0, pos - (*str))) ? del = *str : 0;
-		(*str = ft_strdup(pos + 1)) ? ft_strdel(&del) : 0;
+		*line = ft_strsub(lst->str, 0, pos - (lst->str));
+		del = lst->str;
+		(lst->str = ft_strdup(pos + 1)) ? ft_strdel(&del) : 0;
 		ft_strdel(&bf);
 		return (1);
 	}
-	if (ret == 0 && (*str[0] != '\0'))
+	if (ret == 0 && (lst->str)[0] != '\0')
 	{
-		(*line = ft_strdup(*str)) ? ft_strdel(&bf) : 0;
-		 ft_strdel(str);
+		(*line = ft_strdup(lst->str)) ? ft_strdel(&bf) : 0;
+		ft_strdel(&(lst->str));
 		return (1);
 	}
 	return (0);
@@ -86,21 +76,22 @@ int				get_next_line(const int fd, char **line)
 
 	if (fd < 0 || !line || read(fd, NULL, 0) < 0 || BUFF_SIZE < 1)
 		return (-1);
-	ft_find_fd(&head, new = ft_lst_create(fd), fd);
+	new = ft_find_fd(&head, fd);
 	bf = ft_strnew(BUFF_SIZE);
 	while (1)
 	{
 		if (new->str && !ft_strchr(new->str, '\n'))
 		{
-			ret = read(fd, bf, BUFF_SIZE);
+			ret = read(new->fd, bf, BUFF_SIZE);
 			bf[ret] = '\0';
 		}
+		if (!new->str || (ret == 0 && (new->str)[0] == '\0'))
+			break ;
 		if (ret == -1)
 			return (-1);
-		if (ft_check(&(new->str), bf, line, ret))
+		if (new->str && ft_check(new, bf, line, ret))
 			return (1);
-		if (ret == 0 && new->str[0] == '\0')
-			break ;
 	}
+	ft_strdel(&bf);
 	return (0);
 }
