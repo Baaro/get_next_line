@@ -93,5 +93,6 @@ int				get_next_line(const int fd, char **line)
 			return (1);
 	}
 	ft_strdel(&bf);
+        free(new);
 	return (0);
 }
