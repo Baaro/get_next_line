@@ -88,11 +88,11 @@ int				get_next_line(const int fd, char **line)
 		if (!new->str || (ret == 0 && (new->str)[0] == '\0'))
 			break ;
 		if (ret == -1)
-			return (-1);
+			break ;
 		if (new->str && ft_check(new, bf, line, ret))
 			return (1);
 	}
 	ft_strdel(&bf);
         free(new);
-	return (0);
+	return (ret == -1 ? -1 : 0);
 }
